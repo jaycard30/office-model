@@ -69,7 +69,6 @@ import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUnifo
 
 RectAreaLightUniformsLib.init();
 
-// ─── RENDERER ────────────────────────────────────────────────────────────────
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -80,16 +79,13 @@ renderer.toneMappingExposure = 1.1;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 document.body.appendChild(renderer.domElement);
 
-// ─── SCENE ───────────────────────────────────────────────────────────────────
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xc8d8e8);
 scene.fog = new THREE.Fog(0xd0c8bc, 18, 55);
 
-// ─── CAMERA ──────────────────────────────────────────────────────────────────
 const camera = new THREE.PerspectiveCamera(72, window.innerWidth / window.innerHeight, 0.05, 80);
 camera.position.set(1, 1.72, 7.5);
 
-// ─── CONTROLS ────────────────────────────────────────────────────────────────
 const controls = new PointerLockControls(camera, renderer.domElement);
 scene.add(controls.getObject());
 
@@ -98,801 +94,422 @@ overlay.addEventListener('click', () => controls.lock());
 controls.addEventListener('lock', () => overlay.classList.add('hidden'));
 controls.addEventListener('unlock', () => overlay.classList.remove('hidden'));
 
-// ─── MATERIALS ───────────────────────────────────────────────────────────────
 const M = {
-  carpet:     new THREE.MeshStandardMaterial({ color: 0x7a6b52, roughness: 0.98 }),
-  carpetConf: new THREE.MeshStandardMaterial({ color: 0x5a6a7a, roughness: 0.98 }),
-  wallOff:    new THREE.MeshStandardMaterial({ color: 0xe2ddd4, roughness: 0.85 }),
-  wallGlass:  new THREE.MeshStandardMaterial({ color: 0xb8d4e8, transparent: true, opacity: 0.22, roughness: 0.05, side: THREE.DoubleSide }),
-  ceiling:    new THREE.MeshStandardMaterial({ color: 0xf2f0ec, roughness: 0.95 }),
-  tileGrid:   new THREE.MeshStandardMaterial({ color: 0xd8d5cf, roughness: 0.9 }),
-  deskLight:  new THREE.MeshStandardMaterial({ color: 0xc8a870, roughness: 0.55 }),
-  deskDark:   new THREE.MeshStandardMaterial({ color: 0x5c3318, roughness: 0.6 }),
-  chairBlack: new THREE.MeshStandardMaterial({ color: 0x1c1c1c, roughness: 0.8 }),
-  metal:      new THREE.MeshStandardMaterial({ color: 0x909090, metalness: 0.75, roughness: 0.3 }),
-  metalDark:  new THREE.MeshStandardMaterial({ color: 0x555555, metalness: 0.7, roughness: 0.4 }),
-  glass:      new THREE.MeshStandardMaterial({ color: 0x88bbdd, transparent: true, opacity: 0.28, roughness: 0.04 }),
-  wood:       new THREE.MeshStandardMaterial({ color: 0x7a5428, roughness: 0.7 }),
-  woodLight:  new THREE.MeshStandardMaterial({ color: 0xb07840, roughness: 0.65 }),
-  whiteboard: new THREE.MeshStandardMaterial({ color: 0xf8f8f6, roughness: 0.4 }),
-  screen:     new THREE.MeshStandardMaterial({ color: 0x2255aa, emissive: 0x102040, emissiveIntensity: 0.8, roughness: 0.1 }),
-  screenDark: new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.25, metalness: 0.5 }),
-  cubicle:    new THREE.MeshStandardMaterial({ color: 0x9e8e7a, roughness: 0.92 }),
-  cubicleTop: new THREE.MeshStandardMaterial({ color: 0x7a6b58, roughness: 0.9 }),
-  filingCab:  new THREE.MeshStandardMaterial({ color: 0x828278, metalness: 0.55, roughness: 0.45 }),
-  paper:      new THREE.MeshStandardMaterial({ color: 0xfcfcf4, roughness: 0.92 }),
-  blinds:     new THREE.MeshStandardMaterial({ color: 0xd8ceaa, roughness: 0.8, side: THREE.DoubleSide }),
-  couchBrown: new THREE.MeshStandardMaterial({ color: 0x7a4820, roughness: 0.88 }),
-  windowGlow: new THREE.MeshStandardMaterial({ color: 0xd8eeff, emissive: 0x6090c0, emissiveIntensity: 0.4, transparent: true, opacity: 0.35 }),
-  fluorescent:new THREE.MeshStandardMaterial({ color: 0xfff8e8, emissive: 0xfff0c8, emissiveIntensity: 3.5, roughness: 0.1 }),
-  lightFixture:new THREE.MeshStandardMaterial({ color: 0xe8e8e0, roughness: 0.6 }),
-  plastic:    new THREE.MeshStandardMaterial({ color: 0xcccccc, roughness: 0.4 }),
-  black:      new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.7 }),
-  navy:       new THREE.MeshStandardMaterial({ color: 0x0a2060, roughness: 0.6 }),
-  gold:       new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.8, roughness: 0.2 }),
-  green:      new THREE.MeshStandardMaterial({ color: 0x228822, roughness: 0.9 }),
-  red:        new THREE.MeshStandardMaterial({ color: 0xaa2222, roughness: 0.7 }),
-  blue:       new THREE.MeshStandardMaterial({ color: 0x2244aa, roughness: 0.6 }),
+  carpet:      new THREE.MeshStandardMaterial({ color: 0x7a6b52, roughness: 0.98 }),
+  carpetConf:  new THREE.MeshStandardMaterial({ color: 0x5a6a7a, roughness: 0.98 }),
+  wallOff:     new THREE.MeshStandardMaterial({ color: 0xe2ddd4, roughness: 0.85 }),
+  wallGlass:   new THREE.MeshStandardMaterial({ color: 0xb8d4e8, transparent: true, opacity: 0.22, roughness: 0.05, side: THREE.DoubleSide }),
+  deskLight:   new THREE.MeshStandardMaterial({ color: 0xc8a870, roughness: 0.55 }),
+  deskDark:    new THREE.MeshStandardMaterial({ color: 0x5c3318, roughness: 0.6 }),
+  metal:       new THREE.MeshStandardMaterial({ color: 0x909090, metalness: 0.75, roughness: 0.3 }),
+  wood:        new THREE.MeshStandardMaterial({ color: 0x7a5428, roughness: 0.7 }),
+  woodLight:   new THREE.MeshStandardMaterial({ color: 0xb07840, roughness: 0.65 }),
+  whiteboard:  new THREE.MeshStandardMaterial({ color: 0xf8f8f6, roughness: 0.4 }),
+  screen:      new THREE.MeshStandardMaterial({ color: 0x2255aa, emissive: 0x102040, emissiveIntensity: 0.8, roughness: 0.1 }),
+  screenDark:  new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.25, metalness: 0.5 }),
+  cubicle:     new THREE.MeshStandardMaterial({ color: 0x9e8e7a, roughness: 0.92 }),
+  cubicleTop:  new THREE.MeshStandardMaterial({ color: 0x7a6b58, roughness: 0.9 }),
+  filingCab:   new THREE.MeshStandardMaterial({ color: 0x828278, metalness: 0.55, roughness: 0.45 }),
+  paper:       new THREE.MeshStandardMaterial({ color: 0xfcfcf4, roughness: 0.92 }),
+  blinds:      new THREE.MeshStandardMaterial({ color: 0xd8ceaa, roughness: 0.8, side: THREE.DoubleSide }),
+  couchBrown:  new THREE.MeshStandardMaterial({ color: 0x7a4820, roughness: 0.88 }),
+  windowGlow:  new THREE.MeshStandardMaterial({ color: 0xd8eeff, emissive: 0x6090c0, emissiveIntensity: 0.4, transparent: true, opacity: 0.35 }),
+  fluorescent: new THREE.MeshStandardMaterial({ color: 0xfff8e8, emissive: 0xfff0c8, emissiveIntensity: 3.5, roughness: 0.1 }),
+  lightFix:    new THREE.MeshStandardMaterial({ color: 0xe8e8e0, roughness: 0.6 }),
+  plastic:     new THREE.MeshStandardMaterial({ color: 0xcccccc, roughness: 0.4 }),
+  black:       new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.7 }),
+  navy:        new THREE.MeshStandardMaterial({ color: 0x0a2060, roughness: 0.6 }),
+  gold:        new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.8, roughness: 0.2 }),
+  red:         new THREE.MeshStandardMaterial({ color: 0xaa2222, roughness: 0.7 }),
+  blue:        new THREE.MeshStandardMaterial({ color: 0x2244aa, roughness: 0.6 }),
+  gridMat:     new THREE.MeshStandardMaterial({ color: 0xb8b5b0, roughness: 0.7 }),
 };
 
-// ─── GEOMETRY HELPERS ────────────────────────────────────────────────────────
-function addMesh(geo, mat, x, y, z, rx=0, ry=0, rz=0, shadow=true) {
-  const m = new THREE.Mesh(geo, mat);
-  m.position.set(x, y, z);
-  m.rotation.set(rx, ry, rz);
-  if (shadow) { m.castShadow = true; m.receiveShadow = true; }
-  scene.add(m); return m;
-}
-const _bCache = {};
-function bGeo(w,h,d) {
-  const k=`${w}x${h}x${d}`; if(!_bCache[k]) _bCache[k]=new THREE.BoxGeometry(w,h,d);
-  return _bCache[k];
-}
+const _bg = {};
+function bGeo(w,h,d) { const k=`${w},${h},${d}`; if(!_bg[k]) _bg[k]=new THREE.BoxGeometry(w,h,d); return _bg[k]; }
 function b(w,h,d,mat,x,y,z,rx=0,ry=0,rz=0) {
-  return addMesh(bGeo(w,h,d), mat, x,y,z, rx,ry,rz);
+  const m=new THREE.Mesh(bGeo(w,h,d),mat); m.position.set(x,y,z); m.rotation.set(rx,ry,rz);
+  m.castShadow=true; m.receiveShadow=true; scene.add(m); return m;
 }
 function cyl(rt,rb,h,seg,mat,x,y,z,rx=0,ry=0,rz=0) {
-  return addMesh(new THREE.CylinderGeometry(rt,rb,h,seg), mat, x,y,z,rx,ry,rz);
+  const m=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,seg),mat); m.position.set(x,y,z); m.rotation.set(rx,ry,rz);
+  m.castShadow=true; m.receiveShadow=true; scene.add(m); return m;
 }
 function sph(r,seg,mat,x,y,z) {
-  return addMesh(new THREE.SphereGeometry(r,seg,seg), mat, x,y,z);
+  const m=new THREE.Mesh(new THREE.SphereGeometry(r,seg,seg),mat); m.position.set(x,y,z);
+  m.castShadow=true; m.receiveShadow=true; scene.add(m); return m;
 }
 
-// ─── CONSTANTS ───────────────────────────────────────────────────────────────
-const CH  = 3.05;  // ceiling height
-const WT  = 0.12;  // wall thickness
-const EYE = 1.72;  // camera eye height
+const CH=3.05, EYE=1.72;
 
-// ─── LIGHTING ────────────────────────────────────────────────────────────────
-const ambLight = new THREE.AmbientLight(0xfff5e8, 0.55);
-scene.add(ambLight);
-
-// Exterior daylight
-const sun = new THREE.DirectionalLight(0xfff8f0, 0.6);
-sun.position.set(8, 12, 18);
-sun.castShadow = true;
-sun.shadow.mapSize.set(2048, 2048);
-sun.shadow.camera.near = 0.5;
-sun.shadow.camera.far = 60;
-sun.shadow.camera.left = -25;
-sun.shadow.camera.right = 25;
-sun.shadow.camera.top = 20;
-sun.shadow.camera.bottom = -20;
-sun.shadow.bias = -0.001;
+// Lighting
+scene.add(new THREE.AmbientLight(0xfff5e8, 0.55));
+const sun=new THREE.DirectionalLight(0xfff8f0,0.6);
+sun.position.set(8,12,18); sun.castShadow=true;
+sun.shadow.mapSize.set(2048,2048);
+sun.shadow.camera.left=-25; sun.shadow.camera.right=25;
+sun.shadow.camera.top=20; sun.shadow.camera.bottom=-20;
+sun.shadow.camera.far=60; sun.shadow.bias=-0.001;
 scene.add(sun);
 
-function addFluorescentFixture(x, z, len=1.1) {
-  // Fixture housing
-  b(len, 0.06, 0.28, M.lightFixture, x, CH-0.03, z);
-  // Glowing tube
-  b(len-0.05, 0.025, 0.08, M.fluorescent, x, CH-0.035, z);
-  
-  // RectAreaLight for bounce
-  const rl = new THREE.RectAreaLight(0xfff8e4, 14, len, 0.28);
-  rl.position.set(x, CH-0.07, z);
-  rl.rotation.x = Math.PI / 2;
-  scene.add(rl);
-  
-  // Point light for shadow casting
-  const pl = new THREE.PointLight(0xfff5dc, 1.4, 7, 1.8);
-  pl.position.set(x, CH-0.15, z);
-  pl.castShadow = true;
-  pl.shadow.mapSize.set(256, 256);
-  pl.shadow.bias = -0.002;
-  scene.add(pl);
+function fluoro(x,z,len=1.1) {
+  b(len,0.06,0.28,M.lightFix,x,CH-0.03,z);
+  b(len-0.05,0.025,0.08,M.fluorescent,x,CH-0.035,z);
+  const rl=new THREE.RectAreaLight(0xfff8e4,14,len,0.28);
+  rl.position.set(x,CH-0.07,z); rl.rotation.x=Math.PI/2; scene.add(rl);
+  const pl=new THREE.PointLight(0xfff5dc,1.4,7,1.8);
+  pl.position.set(x,CH-0.15,z); pl.castShadow=true;
+  pl.shadow.mapSize.set(256,256); pl.shadow.bias=-0.002; scene.add(pl);
 }
+for(let xi=-1;xi<=10;xi+=3.2) for(let zi=-6.5;zi<=2.5;zi+=3.0) fluoro(xi,zi);
+fluoro(-9.5,-5.8); fluoro(-9.5,-3.8);
+fluoro(-9.8,-0.5); fluoro(-8.4,-0.5); fluoro(-9.1,1.5);
+fluoro(-9.8,5.2); fluoro(-8.5,5.2);
+fluoro(9.5,5.5); fluoro(9.5,7.0);
+fluoro(1.0,5.8); fluoro(3.5,5.8);
 
-// Bullpen lights
-for (let xi = -1; xi <= 10; xi += 3.2) {
-  for (let zi = -6.5; zi <= 2.5; zi += 3.0) {
-    addFluorescentFixture(xi, zi);
-  }
+// Floors
+b(22,0.06,14,M.carpet,1,-0.03,-1);
+b(6,0.06,7,M.carpetConf,-9,-0.03,-0.5);
+b(9,0.06,5,new THREE.MeshStandardMaterial({color:0xd8d0c0,roughness:0.6}),3,-0.03,6);
+b(6,0.06,6,new THREE.MeshStandardMaterial({color:0xc8c0a8,roughness:0.7}),-9,-0.03,5.5);
+b(6,0.06,6,new THREE.MeshStandardMaterial({color:0x8a7c6a,roughness:0.95}),9,-0.03,5.5);
+
+// Ceiling tiles
+const tW=1.22,tD=0.61;
+const tMats=[new THREE.MeshStandardMaterial({color:0xf0ede8,roughness:0.96}),new THREE.MeshStandardMaterial({color:0xece9e4,roughness:0.96})];
+for(let xi=-11;xi<12;xi+=tW) for(let zi=-8;zi<9;zi+=tD) {
+  const m=new THREE.Mesh(bGeo(tW-0.012,0.04,tD-0.012),tMats[(Math.floor(xi+zi))&1]);
+  m.position.set(xi+tW/2,CH,zi+tD/2); m.receiveShadow=true; scene.add(m);
 }
-// Michael's office
-addFluorescentFixture(-9.5, -5.8);
-addFluorescentFixture(-9.5, -3.8);
+for(let xi=-11;xi<=11;xi+=tW) b(0.025,0.025,18,M.gridMat,xi,CH+0.012,0);
+for(let zi=-8;zi<=9;zi+=tD) b(24,0.025,0.025,M.gridMat,0,CH+0.012,zi);
+
+// Exterior walls
+b(24,CH,0.12,M.wallOff,0,CH/2,-8);
+b(0.12,CH,17,M.wallOff,-12,CH/2,0.5);
+b(0.12,CH,17,M.wallOff,12,CH/2,0.5);
+b(7,CH,0.12,M.wallOff,-8.5,CH/2,8.5);
+b(7,CH,0.12,M.wallOff,8.5,CH/2,8.5);
+b(10,0.9,0.12,M.wallOff,0,0.45,8.5);
+b(10,CH-0.9,0.12,M.wallGlass,0,0.9+(CH-0.9)/2,8.5);
+
+// Windows
+function win(x,y,z,w,h,ax) {
+  const f=new THREE.MeshStandardMaterial({color:0xd0cfc8,roughness:0.5});
+  if(ax==='z'){b(w+0.08,h+0.08,0.06,f,x,y,z);b(w,h,0.04,M.windowGlow,x,y,z);}
+  else{b(0.06,h+0.08,w+0.08,f,x,y,z);b(0.04,h,w,M.windowGlow,x,y,z);}
+}
+win(-4,2,-8,2.5,1.4,'z'); win(2,2,-8,2.5,1.4,'z'); win(7,2,-8,2.5,1.4,'z');
+win(-12,2,-5.5,2,1.4,'x'); win(-12,2,-4,2,1.4,'x');
+win(-7,2,8.5,2.5,1.4,'z'); win(7,2,8.5,2.5,1.4,'z');
+function blinds(x,y,z,w,ax) {
+  for(let i=0;i<14;i++){const yy=y-0.6+i*(1.2/14);
+    if(ax==='z')b(w-0.05,0.035,0.01,M.blinds,x,yy,z-0.04);
+    else b(0.01,0.035,w-0.05,M.blinds,x-0.04,yy,z);}
+}
+blinds(-4,2,-8,2.5,'z'); blinds(2,2,-8,2.5,'z'); blinds(7,2,-8,2.5,'z');
+blinds(-12,2,-5.5,2,'x'); blinds(-12,2,-4,2,'x');
+const wl=new THREE.SpotLight(0xd8eeff,1.2,12,0.6,0.5);
+wl.position.set(-11,2.5,-5); wl.target.position.set(0,0,0); scene.add(wl); scene.add(wl.target);
+
+// Interior walls - Michael's office
+b(5,CH,0.12,M.wallGlass,-9.5,CH/2,-3);
+b(0.12,CH,1.6,M.wallGlass,-7,CH/2,-3.8);
+b(0.12,0.8,1.2,M.wallGlass,-7,CH-0.4,-4.7);
+b(0.12,CH,2.2,M.wallGlass,-7,CH/2,-6.5);
+b(5,CH,0.12,M.wallOff,-9.5,CH/2,-3);
 // Conference room
-addFluorescentFixture(-9.8, -0.5);
-addFluorescentFixture(-8.4, -0.5);
-addFluorescentFixture(-9.1, 1.5);
+b(0.12,CH,2,M.wallGlass,-7,CH/2,-1.5);
+b(0.12,0.8,1.2,M.wallGlass,-7,CH-0.4,0.1);
+b(0.12,CH,2.6,M.wallGlass,-7,CH/2,2);
+b(5,CH,0.12,M.wallGlass,-9.5,CH/2,3.8);
 // Break room
-addFluorescentFixture(-9.8, 5.2);
-addFluorescentFixture(-8.5, 5.2);
+b(0.12,CH,4.5,M.wallOff,-7,CH/2,6.25);
+b(5,CH,0.12,M.wallOff,-9.5,CH/2,4);
 // Annex
-addFluorescentFixture(9.5, 5.5);
-addFluorescentFixture(9.5, 7.0);
+b(0.12,CH,4.7,M.wallOff,7,CH/2,6.15);
+b(5,CH,0.12,M.wallOff,9.5,CH/2,3.8);
+
+// Monitor helper
+function mon(x,y,z,ry=0){
+  const g=new THREE.Group();
+  const sc=new THREE.Mesh(bGeo(0.44,0.33,0.04),M.screenDark); sc.position.y=0.165; g.add(sc);
+  const sf=new THREE.Mesh(bGeo(0.40,0.29,0.015),M.screen); sf.position.set(0,0.165,0.028); g.add(sf);
+  const nk=new THREE.Mesh(new THREE.CylinderGeometry(0.018,0.018,0.22,8),M.metal); nk.position.y=-0.11; g.add(nk);
+  const bs=new THREE.Mesh(bGeo(0.2,0.018,0.16),M.metal); bs.position.y=-0.23; g.add(bs);
+  g.position.set(x,y+0.34,z); g.rotation.y=ry;
+  g.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}}); scene.add(g);
+}
+
+// Chair helper
+function chair(x,z,ry=0,col=0x1c1c1c){
+  const mat=new THREE.MeshStandardMaterial({color:col,roughness:0.8});
+  const g=new THREE.Group();
+  const se=new THREE.Mesh(bGeo(0.52,0.08,0.5),mat); se.position.y=0.5; g.add(se);
+  const bk=new THREE.Mesh(bGeo(0.5,0.58,0.07),mat); bk.position.set(0,0.84,-0.22); g.add(bk);
+  const po=new THREE.Mesh(new THREE.CylinderGeometry(0.025,0.025,0.45,8),M.metal); po.position.y=0.23; g.add(po);
+  const st=new THREE.Mesh(new THREE.CylinderGeometry(0.3,0.3,0.035,5),M.metal); st.position.y=0.035; g.add(st);
+  [-0.27,0.27].forEach(ox=>{const ar=new THREE.Mesh(bGeo(0.055,0.055,0.32),mat); ar.position.set(ox,0.7,-0.05); g.add(ar);});
+  g.position.set(x,0,z); g.rotation.y=ry;
+  g.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}}); scene.add(g);
+}
+
+// Desk helper
+function desk(x,z,ry=0){
+  const g=new THREE.Group();
+  const tp=new THREE.Mesh(bGeo(1.55,0.05,0.82),M.deskLight); tp.position.y=0.76; g.add(tp);
+  [[-0.68,-0.36],[0.68,-0.36],[-0.68,0.36],[0.68,0.36]].forEach(([lx,lz])=>{
+    const lg=new THREE.Mesh(bGeo(0.05,0.76,0.05),M.deskLight); lg.position.set(lx,0.38,lz); g.add(lg);});
+  const pd=new THREE.Mesh(bGeo(0.42,0.62,0.52),M.deskLight); pd.position.set(0.52,0.31,0); g.add(pd);
+  g.position.set(x,0,z); g.rotation.y=ry;
+  g.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}}); scene.add(g);
+}
+
+// Divider helper
+function div(x,z,len,ry=0,h=1.32){
+  const g=new THREE.Group();
+  const pn=new THREE.Mesh(bGeo(len,h,0.055),M.cubicle); pn.position.y=h/2; g.add(pn);
+  const tp=new THREE.Mesh(bGeo(len+0.02,0.04,0.065),M.cubicleTop); tp.position.y=h; g.add(tp);
+  g.position.set(x,0,z); g.rotation.y=ry;
+  g.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}}); scene.add(g);
+}
+
 // Reception
-addFluorescentFixture(1.0, 5.8);
-addFluorescentFixture(3.5, 5.8);
+b(3.8,1.1,0.55,M.deskDark,0.2,0.55,6.6);
+b(3.9,0.05,0.6,M.deskLight,0.2,1.1,6.6);
+b(0.55,1.1,2.2,M.deskDark,2.25,0.55,5.6);
+b(0.6,0.05,2.3,M.deskLight,2.25,1.1,5.6);
+b(0.9,0.08,0.02,M.navy,0.2,0.65,6.3);
+b(0.2,0.04,0.14,M.plastic,-0.8,1.12,6.35);
+b(0.08,0.12,0.08,new THREE.MeshStandardMaterial({color:0xff6699,roughness:0.8}),-0.6,1.12,6.42);
+b(0.15,0.22,0.08,new THREE.MeshStandardMaterial({color:0x556b8a,roughness:0.7}),-0.3,1.12,6.35);
+mon(0.9,1.08,6.3,Math.PI);
+chair(-0.2,6.1,Math.PI);
 
-// ─── FLOOR ───────────────────────────────────────────────────────────────────
-// Main bullpen carpet
-b(22, 0.06, 14, M.carpet,     1,  -0.03,  -1);
-// Conference room carpet (darker blue-grey)
-b( 6, 0.06,  7, M.carpetConf, -9, -0.03, -0.5);
-// Reception tile (lighter)
-b( 9, 0.06,  5, new THREE.MeshStandardMaterial({color:0xd8d0c0,roughness:0.6}), 3, -0.03, 6);
-// Break room linoleum
-b( 6, 0.06,  6, new THREE.MeshStandardMaterial({color:0xc8c0a8,roughness:0.7}), -9, -0.03, 5.5);
-// Annex carpet
-b( 6, 0.06,  6, new THREE.MeshStandardMaterial({color:0x8a7c6a,roughness:0.95}), 9, -0.03, 5.5);
+// Waiting sofa
+(function(){
+  const g=new THREE.Group(), mat=M.couchBrown, w=2.4;
+  const se=new THREE.Mesh(bGeo(w,0.2,0.72),mat); se.position.y=0.44; g.add(se);
+  const bk=new THREE.Mesh(bGeo(w,0.52,0.14),mat); bk.position.set(0,0.78,-0.29); g.add(bk);
+  [-w/2,w/2].forEach(ox=>{const ar=new THREE.Mesh(bGeo(0.14,0.54,0.72),mat); ar.position.set(ox,0.61,0); g.add(ar);});
+  g.position.set(4.5,0,7.5); g.rotation.y=Math.PI;
+  g.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}}); scene.add(g);
+})();
+b(1.0,0.04,0.55,M.deskDark,4.5,0.46,6.7);
+b(0.24,0.008,0.18,M.red,4.3,0.48,6.75);
+b(0.22,0.008,0.16,M.blue,4.55,0.49,6.65);
 
-// ─── CEILING TILES ───────────────────────────────────────────────────────────
-// Main tile field
-const tileW = 1.22, tileD = 0.61;
-const tileMats = [
-  new THREE.MeshStandardMaterial({color:0xf0ede8, roughness:0.96}),
-  new THREE.MeshStandardMaterial({color:0xece9e4, roughness:0.96})
-];
-for (let xi = -11; xi < 12; xi += tileW) {
-  for (let zi = -8; zi < 9; zi += tileD) {
-    const m = new THREE.Mesh(bGeo(tileW-0.012, 0.04, tileD-0.012), tileMats[(Math.floor(xi+zi))&1]);
-    m.position.set(xi + tileW/2, CH, zi + tileD/2);
-    m.receiveShadow = true;
-    scene.add(m);
-  }
-}
+// Bullpen desks
+desk(-1.2,-3.2,0); mon(-1.2,0.78,-3.4); chair(-1.2,-2.4,Math.PI);
+b(0.28,0.03,0.08,new THREE.MeshStandardMaterial({color:0x8b4513}),-1.0,0.79,-3.0);
+b(0.14,0.12,0.05,new THREE.MeshStandardMaterial({color:0x882222}),-0.7,0.8,-3.15);
+desk(-1.2,-1.6,Math.PI); mon(-1.2,0.78,-1.4,Math.PI); chair(-1.2,-2.4,0);
+b(0.1,0.1,0.08,new THREE.MeshStandardMaterial({color:0xcc8844}),-1.6,0.8,-1.52);
+div(-2.5,-2.4,2.5,0); div(-1.2,-4.2,2.8,Math.PI/2); div(-1.2,-0.6,2.8,Math.PI/2);
 
-// ─── EXTERIOR WALLS ──────────────────────────────────────────────────────────
-// North wall (back)
-b(24, CH, WT, M.wallOff, 0, CH/2, -8);
-// West wall
-b(WT, CH, 17, M.wallOff, -12, CH/2, 0.5);
-// East wall  
-b(WT, CH, 17, M.wallOff,  12, CH/2, 0.5);
-// South wall - split around entrance
-b(7, CH, WT, M.wallOff, -8.5, CH/2, 8.5);
-b(7, CH, WT, M.wallOff,  8.5, CH/2, 8.5);
-// Reception front glass above low wall
-b(10, 0.9, WT, M.wallOff, 0, 0.45, 8.5);
-b(10, CH-0.9, WT, M.wallGlass, 0, 0.9+(CH-0.9)/2, 8.5);
+desk(1.5,-3.2,0); mon(1.5,0.78,-3.4); chair(1.5,-2.4,Math.PI);
+b(0.18,0.14,0.04,new THREE.MeshStandardMaterial({color:0x336688}),1.8,0.8,-3.05);
+desk(1.5,-1.6,Math.PI); mon(1.5,0.78,-1.4,Math.PI); chair(1.5,-2.4,0);
+b(0.12,0.1,0.08,new THREE.MeshStandardMaterial({color:0x885522}),1.9,0.8,-1.55);
+div(0.2,-2.4,2.5,0); div(1.5,-4.2,2.8,Math.PI/2); div(1.5,-0.6,2.8,Math.PI/2);
 
-// ─── WINDOWS ─────────────────────────────────────────────────────────────────
-function addWindow(x, y, z, w, h, axis) {
-  const frameMat = new THREE.MeshStandardMaterial({color:0xd0cfc8, roughness:0.5});
-  if (axis === 'z') {
-    b(w+0.08, h+0.08, 0.06, frameMat, x, y, z);
-    b(w, h, 0.04, M.windowGlow, x, y, z);
-  } else {
-    b(0.06, h+0.08, w+0.08, frameMat, x, y, z);
-    b(0.04, h, w, M.windowGlow, x, y, z);
-  }
-}
-// North windows (bullpen back)
-addWindow(-4, 2.0, -8.0, 2.5, 1.4, 'z');
-addWindow( 2, 2.0, -8.0, 2.5, 1.4, 'z');
-addWindow( 7, 2.0, -8.0, 2.5, 1.4, 'z');
-// West windows (Michael)
-addWindow(-12.0, 2.0, -5.5, 2.0, 1.4, 'x');
-addWindow(-12.0, 2.0, -4.0, 2.0, 1.4, 'x');
-// South windows
-addWindow(-7, 2.0, 8.5, 2.5, 1.4, 'z');
-addWindow( 7, 2.0, 8.5, 2.5, 1.4, 'z');
-
-// Blinds on windows
-function addBlinds(x, y, z, w, axis) {
-  const slats = 14;
-  for (let i = 0; i < slats; i++) {
-    const yy = y - 0.6 + i * (1.2 / slats);
-    if (axis === 'z') b(w-0.05, 0.035, 0.01, M.blinds, x, yy, z - 0.04);
-    else              b(0.01, 0.035, w-0.05, M.blinds, x - 0.04, yy, z);
-  }
-}
-addBlinds(-4, 2.0, -8.0, 2.5, 'z');
-addBlinds( 2, 2.0, -8.0, 2.5, 'z');
-addBlinds( 7, 2.0, -8.0, 2.5, 'z');
-addBlinds(-12.0, 2.0, -5.5, 2.0, 'x');
-addBlinds(-12.0, 2.0, -4.0, 2.0, 'x');
-
-// Window light fill
-const winLight1 = new THREE.SpotLight(0xd8eeff, 1.2, 12, 0.6, 0.5);
-winLight1.position.set(-11, 2.5, -5);
-winLight1.target.position.set(0, 0, 0);
-scene.add(winLight1); scene.add(winLight1.target);
-
-// ─── INTERIOR WALLS ──────────────────────────────────────────────────────────
-
-// Michael's office walls (x: -12 to -7, z: -8 to -3)
-// Glass south wall facing bullpen
-b(5, CH, WT, M.wallGlass, -9.5, CH/2, -3.0);
-// Glass east wall – with door opening (2-7m from south)
-b(WT, CH, 1.6, M.wallGlass, -7.0, CH/2, -3.8);
-// Door frame top
-b(WT, 0.8, 1.2, M.wallGlass, -7.0, CH-0.4, -4.7);
-// Rest of east glass
-b(WT, CH, 2.2, M.wallGlass, -7.0, CH/2, -6.5);
-
-// Divider between Michael's office & conference room (solid wall)
-b(5, CH, WT, M.wallOff, -9.5, CH/2, -3.0);
-
-// Conference room walls (x: -12 to -7, z: -3 to 4)
-// Glass east wall – with door
-b(WT, CH, 2.0, M.wallGlass, -7.0, CH/2, -1.5);
-b(WT, 0.8, 1.2, M.wallGlass, -7.0, CH-0.4, 0.1);
-b(WT, CH, 2.6, M.wallGlass, -7.0, CH/2, 2.0);
-// Glass south wall of conference room
-b(5, CH, WT, M.wallGlass, -9.5, CH/2, 3.8);
-
-// Break room walls (x: -12 to -7, z: 4 to 8.5)
-b(WT, CH, 4.5, M.wallOff, -7.0, CH/2, 6.25);
-b(5, CH, WT, M.wallOff, -9.5, CH/2, 4.0);
-
-// Annex walls (x: 7 to 12, z: 3.8 to 8.5)
-b(WT, CH, 4.7, M.wallOff,  7.0, CH/2, 6.15);
-b(5, CH, WT, M.wallOff,  9.5, CH/2, 3.8);
-// Annex door opening handled by omission
-
-// ─── CEILING GRID STRIPS ─────────────────────────────────────────────────────
-const gridMat = new THREE.MeshStandardMaterial({color:0xb8b5b0, roughness:0.7});
-for (let xi = -11; xi <= 11; xi += tileW) {
-  b(0.025, 0.025, 18, gridMat, xi, CH+0.012, 0);
-}
-for (let zi = -8; zi <= 9; zi += tileD) {
-  b(24, 0.025, 0.025, gridMat, 0, CH+0.012, zi);
-}
-
-// ─── RECEPTION AREA ──────────────────────────────────────────────────────────
-// Main reception counter
-b(3.8, 1.1, 0.55, M.deskDark, 0.2, 0.55, 6.6);
-b(3.9, 0.05, 0.6, M.deskLight, 0.2, 1.1, 6.6);
-// Return leg of L
-b(0.55, 1.1, 2.2, M.deskDark, 2.25, 0.55, 5.6);
-b(0.6, 0.05, 2.3, M.deskLight, 2.25, 1.1, 5.6);
-// Dunder Mifflin name plate on counter front
-b(0.9, 0.08, 0.02, M.navy, 0.2, 0.65, 6.3);
-// Phone
-b(0.2, 0.04, 0.14, M.plastic, -0.8, 1.12, 6.35);
-b(0.16, 0.06, 0.06, M.black, -0.8, 1.16, 6.28);
-// Monitor
-function desk_monitor(x, y, z, ry=0) {
-  const g = new THREE.Group();
-  const screen = new THREE.Mesh(bGeo(0.44, 0.33, 0.04), M.screenDark); screen.position.y = 0.165; g.add(screen);
-  const face = new THREE.Mesh(bGeo(0.40, 0.29, 0.015), M.screen); face.position.set(0, 0.165, 0.028); g.add(face);
-  const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.22, 8), M.metal); neck.position.y = -0.11; g.add(neck);
-  const base = new THREE.Mesh(bGeo(0.2, 0.018, 0.16), M.metal); base.position.y = -0.23; g.add(base);
-  g.position.set(x, y+0.34, z);
-  g.rotation.y = ry;
-  g.traverse(c => { if(c.isMesh){ c.castShadow=true; c.receiveShadow=true; } });
-  scene.add(g);
-}
-desk_monitor(0.9, 1.08, 6.3, Math.PI);
-// Pam's personal items
-b(0.15, 0.22, 0.08, new THREE.MeshStandardMaterial({color:0x556b8a,roughness:0.7}), -0.3, 1.12, 6.35); // small frame
-b(0.08, 0.12, 0.08, new THREE.MeshStandardMaterial({color:0xff6699,roughness:0.8}), -0.6, 1.12, 6.42);  // mug
-
-// Reception chair
-function office_chair(x, z, ry=0, color=0x1c1c1c) {
-  const mat = new THREE.MeshStandardMaterial({color, roughness:0.8});
-  const g = new THREE.Group();
-  const seat = new THREE.Mesh(bGeo(0.52, 0.08, 0.5), mat); seat.position.y = 0.5; g.add(seat);
-  const back = new THREE.Mesh(bGeo(0.5, 0.58, 0.07), mat); back.position.set(0, 0.84, -0.22); g.add(back);
-  const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.45, 8), M.metal); pole.position.y = 0.23; g.add(pole);
-  const star = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.035, 5), M.metal); star.position.y = 0.035; g.add(star);
-  [-0.27, 0.27].forEach(ox => {
-    const arm = new THREE.Mesh(bGeo(0.055, 0.055, 0.32), mat); arm.position.set(ox, 0.7, -0.05); g.add(arm);
-  });
-  g.position.set(x, 0, z);
-  g.rotation.y = ry;
-  g.traverse(c => { if(c.isMesh){ c.castShadow=true; c.receiveShadow=true; } });
-  scene.add(g);
-}
-office_chair(-0.2, 6.1, Math.PI);
-
-// Waiting area sofa
-function sofa(x, z, w, ry=0) {
-  const g = new THREE.Group();
-  const mat = M.couchBrown;
-  const seat = new THREE.Mesh(bGeo(w, 0.2, 0.72), mat); seat.position.y = 0.44; g.add(seat);
-  const back = new THREE.Mesh(bGeo(w, 0.52, 0.14), mat); back.position.set(0, 0.78, -0.29); g.add(back);
-  [-w/2, w/2].forEach(ox => {
-    const arm = new THREE.Mesh(bGeo(0.14, 0.54, 0.72), mat); arm.position.set(ox, 0.61, 0); g.add(arm);
-  });
-  [[-w/2+0.18, -0.3],[w/2-0.18,-0.3],[-w/2+0.18,0.3],[w/2-0.18,0.3]].forEach(([ox,oz]) => {
-    const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.35, 6), M.wood); leg.position.set(ox, 0.175, oz); g.add(leg);
-  });
-  g.position.set(x, 0, z);
-  g.rotation.y = ry;
-  g.traverse(c => { if(c.isMesh){ c.castShadow=true; c.receiveShadow=true; } });
-  scene.add(g);
-}
-sofa(4.5, 7.5, 2.4, Math.PI);
-
-// Coffee table
-b(1.0, 0.04, 0.55, M.deskDark, 4.5, 0.46, 6.7);
-b(0.9, 0.42, 0.45, M.wood, 4.5, 0.21, 6.7);
-// Magazines
-b(0.24, 0.008, 0.18, M.red, 4.3, 0.48, 6.75);
-b(0.22, 0.008, 0.16, M.blue, 4.55, 0.49, 6.65);
-
-// ─── DESK FUNCTION ───────────────────────────────────────────────────────────
-function work_desk(x, z, ry=0, hasReturn=false) {
-  const g = new THREE.Group();
-  const top = new THREE.Mesh(bGeo(1.55, 0.05, 0.82), M.deskLight); top.position.y = 0.76; g.add(top);
-  [[-0.68,-0.36],[0.68,-0.36],[-0.68,0.36],[0.68,0.36]].forEach(([lx,lz]) => {
-    const leg = new THREE.Mesh(bGeo(0.05, 0.76, 0.05), M.deskLight); leg.position.set(lx, 0.38, lz); g.add(leg);
-  });
-  const pedestal = new THREE.Mesh(bGeo(0.42, 0.62, 0.52), M.deskLight); pedestal.position.set(0.52, 0.31, 0); g.add(pedestal);
-  if (hasReturn) {
-    const ret = new THREE.Mesh(bGeo(0.8, 0.05, 0.72), M.deskLight); ret.position.set(-0.78+0.78/2-0.775, 0.76, 0.27); g.add(ret);
-    const rleg = new THREE.Mesh(bGeo(0.05, 0.76, 0.05), M.deskLight); rleg.position.set(-1.16, 0.38, 0.27); g.add(rleg);
-  }
-  g.position.set(x, 0, z);
-  g.rotation.y = ry;
-  g.traverse(c => { if(c.isMesh){ c.castShadow=true; c.receiveShadow=true; } });
-  scene.add(g);
-}
-
-// ─── CUBICLE DIVIDER ─────────────────────────────────────────────────────────
-function divider(x, z, len, ry=0, h=1.32) {
-  const g = new THREE.Group();
-  const panel = new THREE.Mesh(bGeo(len, h, 0.055), M.cubicle); panel.position.y = h/2; g.add(panel);
-  const top = new THREE.Mesh(bGeo(len+0.02, 0.04, 0.065), M.cubicleTop); top.position.y = h; g.add(top);
-  g.position.set(x, 0, z);
-  g.rotation.y = ry;
-  g.traverse(c => { if(c.isMesh){ c.castShadow=true; c.receiveShadow=true; } });
-  scene.add(g);
-}
-
-// ─── BULLPEN DESK CLUSTERS ────────────────────────────────────────────────────
-
-// Row 1 — Dwight & Jim (face-to-face)
-work_desk(-1.2, -3.2, 0);
-desk_monitor(-1.2, 0.78, -3.4);
-office_chair(-1.2, -2.4, Math.PI);
-b(0.2, 0.04, 0.14, M.plastic, -1.8, 0.8, -3.1); // Dwight phone
-b(0.28, 0.03, 0.08, new THREE.MeshStandardMaterial({color:0x8b4513}), -1.0, 0.79, -3.0); // name plate
-b(0.14, 0.12, 0.05, new THREE.MeshStandardMaterial({color:0x882222,roughness:0.7}), -0.7, 0.8, -3.15); // beet figurine
-b(0.12, 0.16, 0.08, new THREE.MeshStandardMaterial({color:0x4a6030,roughness:0.8}), -0.55, 0.8, -3.0); // beet farm pamphlet
-
-work_desk(-1.2, -1.6, Math.PI);
-desk_monitor(-1.2, 0.78, -1.4, Math.PI);
-office_chair(-1.2, -2.4, 0); // Jim's chair behind desk
-b(0.2, 0.04, 0.14, M.plastic, -0.6, 0.8, -1.7); // Jim's phone
-b(0.1, 0.1, 0.08, new THREE.MeshStandardMaterial({color:0xcc8844}), -1.6, 0.8, -1.52); // Jim's mug
-
-// Cubicle dividers for Jim/Dwight cluster
-divider(-2.5, -2.4, 2.5, 0);
-divider(-1.2, -4.2, 2.8, Math.PI/2);
-divider(-1.2, -0.6, 2.8, Math.PI/2);
-
-// Row 1b — Oscar (adjacent to Jim)
-work_desk(1.5, -3.2, 0);
-desk_monitor(1.5, 0.78, -3.4);
-office_chair(1.5, -2.4, Math.PI);
-b(0.2, 0.04, 0.14, M.plastic, 0.9, 0.8, -3.1);
-b(0.18, 0.14, 0.04, new THREE.MeshStandardMaterial({color:0x336688}), 1.8, 0.8, -3.05); // art print
-
-work_desk(1.5, -1.6, Math.PI); // Kevin
-desk_monitor(1.5, 0.78, -1.4, Math.PI);
-office_chair(1.5, -2.4, 0);
-b(0.12, 0.1, 0.08, new THREE.MeshStandardMaterial({color:0x885522}), 1.9, 0.8, -1.55); // Kevin's snacks
-b(0.14, 0.08, 0.1, new THREE.MeshStandardMaterial({color:0x553311}), 2.0, 0.8, -1.65);
-
-divider(0.2, -2.4, 2.5, 0);
-divider(1.5, -4.2, 2.8, Math.PI/2);
-divider(1.5, -0.6, 2.8, Math.PI/2);
-
-// Row 2 — Angela's area (back right)
-work_desk(4.2, -3.8, 0, true);
-desk_monitor(4.2, 0.78, -4.0);
-office_chair(4.2, -3.0, Math.PI);
-// Angela cat figurines
-[0, 0.08, 0.16, 0.24].forEach((ox, i) => {
-  const catMat = new THREE.MeshStandardMaterial({color:[0xffcc88,0x886644,0xf5f5f5,0x444444][i]});
-  b(0.04, 0.07, 0.04, catMat, 3.9+ox, 0.82, -3.68);
-  b(0.03, 0.04, 0.03, catMat, 3.9+ox, 0.9, -3.68);
+desk(4.2,-3.8,0); mon(4.2,0.78,-4.0); chair(4.2,-3.0,Math.PI);
+[0,0.08,0.16,0.24].forEach((ox,i)=>{
+  const c=new THREE.MeshStandardMaterial({color:[0xffcc88,0x886644,0xf5f5f5,0x444444][i]});
+  b(0.04,0.07,0.04,c,3.9+ox,0.82,-3.68); b(0.03,0.04,0.03,c,3.9+ox,0.9,-3.68);
 });
-b(0.12, 0.02, 0.09, M.paper, 4.6, 0.79, -3.7); // bible verse printout
+div(2.9,-2.4,2.5,0); div(4.2,-5.0,3.0,Math.PI/2);
 
-divider(2.9, -2.4, 2.5, 0);
-divider(4.2, -5.0, 3.0, Math.PI/2);
+desk(5.8,-2.4,0); mon(5.8,0.78,-2.6); chair(5.8,-1.6,Math.PI);
+desk(8.0,-2.4,0); mon(8.0,0.78,-2.6); chair(8.0,-1.6,Math.PI);
+b(0.22,0.005,0.25,M.paper,8.3,0.79,-2.2);
+desk(5.5,0.5,0); mon(5.5,0.78,0.3); chair(5.5,1.3,Math.PI);
+desk(8.0,0.5,0); mon(8.0,0.78,0.3); chair(8.0,1.3,Math.PI);
+desk(5.5,-5.5,0); mon(5.5,0.78,-5.7); chair(5.5,-4.7,Math.PI);
 
-// Row 2b — Phyllis
-work_desk(5.8, -2.4, 0);
-desk_monitor(5.8, 0.78, -2.6);
-office_chair(5.8, -1.6, Math.PI);
-b(0.16, 0.1, 0.08, new THREE.MeshStandardMaterial({color:0xff88aa}), 5.5, 0.8, -2.3); // knitting bag
+// Filing cabinets
+[[-5.5,-7.5],[-6.1,-7.5],[-6.7,-7.5],[10.5,-6.5],[11.0,-6.5],[10.5,-4.5],[11.0,-4.5],[10.5,-2.5]]
+  .forEach(([x,z])=>{b(0.48,1.1,0.62,M.filingCab,x,0.55,z); for(let i=0;i<3;i++) b(0.32,0.018,0.01,M.metal,x,0.22+i*0.35,z+0.32);});
 
-// Row 2c — Stanley
-work_desk(8.0, -2.4, 0);
-desk_monitor(8.0, 0.78, -2.6);
-office_chair(8.0, -1.6, Math.PI);
-b(0.22, 0.005, 0.25, M.paper, 8.3, 0.79, -2.2); // Stanley's crossword
+// Printer
+b(1.2,0.8,0.7,M.wood,9.0,0.4,-3.5); b(1.25,0.04,0.75,M.woodLight,9.0,0.82,-3.5);
+b(0.88,0.42,0.62,M.plastic,9.0,1.05,-3.5); b(0.60,0.06,0.44,M.paper,9.0,0.9,-3.5);
+b(0.015,0.015,0.015,new THREE.MeshStandardMaterial({color:0x22cc44,emissive:0x22cc44,emissiveIntensity:1}),9.35,1.22,-3.2);
 
-// Row 3 — Meredith, Ryan back rows
-work_desk(5.5, 0.5, 0);
-desk_monitor(5.5, 0.78, 0.3);
-office_chair(5.5, 1.3, Math.PI);
+// Michael's office
+b(2.6,0.05,1.35,M.deskDark,-9.5,0.77,-5.8);
+b(2.5,0.74,1.25,new THREE.MeshStandardMaterial({color:0x4a2810,roughness:0.65}),-9.5,0.375,-5.8);
+b(1.1,0.05,1.85,M.deskDark,-8.2,0.77,-4.7);
+b(1.0,0.74,1.75,new THREE.MeshStandardMaterial({color:0x4a2810,roughness:0.65}),-8.2,0.375,-4.7);
+mon(-9.8,0.78,-5.8);
+b(0.072,0.09,0.072,M.navy,-9.0,0.82,-5.2);
+b(0.055,0.22,0.055,M.gold,-9.5,0.88,-5.0);
+b(0.09,0.04,0.09,M.gold,-9.5,0.79,-5.0);
+b(0.3,0.028,0.065,M.gold,-9.5,0.79,-5.28);
+b(0.26,0.006,0.32,M.paper,-10.1,0.79,-5.7);
+chair(-9.5,-6.6,0); chair(-10.7,-4.2,0.5); chair(-8.5,-4.2,-0.5);
 
-work_desk(8.0, 0.5, 0);
-desk_monitor(8.0, 0.78, 0.3);
-office_chair(8.0, 1.3, Math.PI);
-
-// Row 3b — Creed/back
-work_desk(5.5, -5.5, 0);
-desk_monitor(5.5, 0.78, -5.7);
-office_chair(5.5, -4.7, Math.PI);
-b(0.2, 0.12, 0.04, new THREE.MeshStandardMaterial({color:0x664422}), 5.8, 0.8, -5.4); // Creed random thing
-
-// ─── FILING CABINETS ─────────────────────────────────────────────────────────
-function filing_cabinet(x, z, ry=0) {
-  const g = new THREE.Group();
-  b(0.48, 1.1, 0.62, M.filingCab, 0, 0.55, 0);
-  for (let i=0; i<3; i++) {
-    b(0.32, 0.018, 0.01, M.metal, 0, 0.22+i*0.35, 0.32);
-  }
-  const m = new THREE.Group(); m.add(...g.children);
-  // rebuild
-  const mesh = b(0.48, 1.1, 0.62, M.filingCab, x, 0.55, z);
-  for (let i=0; i<3; i++) b(0.32, 0.018, 0.01, M.metal, x, 0.22+i*0.35, z+0.32);
-}
-filing_cabinet(-5.5, -7.5);
-filing_cabinet(-6.1, -7.5);
-filing_cabinet(-6.7, -7.5);
-filing_cabinet(10.5, -6.5);
-filing_cabinet(11.0, -6.5);
-filing_cabinet(10.5, -4.5);
-filing_cabinet(11.0, -4.5);
-filing_cabinet(10.5, -2.5);
-
-// ─── THE PRINTER (infamous) ───────────────────────────────────────────────────
-// Printer stand
-b(1.2, 0.8, 0.7, M.wood, 9.0, 0.4, -3.5);
-b(1.25, 0.04, 0.75, M.woodLight, 9.0, 0.82, -3.5);
-// Printer body
-b(0.88, 0.42, 0.62, M.plastic, 9.0, 1.05, -3.5);
-b(0.72, 0.04, 0.52, new THREE.MeshStandardMaterial({color:0xbbbbbb}), 9.0, 0.86, -3.5);
-b(0.60, 0.06, 0.44, M.paper, 9.0, 0.9, -3.5); // paper stack in tray
-const printerLight = new THREE.MeshStandardMaterial({color:0x22cc44,emissive:0x22cc44,emissiveIntensity:1});
-b(0.015, 0.015, 0.015, printerLight, 9.35, 1.22, -3.2); // status light
-
-// ─── MICHAEL'S OFFICE ────────────────────────────────────────────────────────
-// Executive L-desk
-b(2.6, 0.05, 1.35, M.deskDark, -9.5, 0.77, -5.8);
-b(2.5, 0.74, 1.25, new THREE.MeshStandardMaterial({color:0x4a2810,roughness:0.65}), -9.5, 0.375, -5.8);
-// Return wing
-b(1.1, 0.05, 1.85, M.deskDark, -8.2, 0.77, -4.7);
-b(1.0, 0.74, 1.75, new THREE.MeshStandardMaterial({color:0x4a2810,roughness:0.65}), -8.2, 0.375, -4.7);
-// Desk top details
-desk_monitor(-9.8, 0.78, -5.8);
-b(0.2, 0.04, 0.14, M.plastic, -10.3, 0.8, -5.4); // phone
-// World's Best Boss mug
-b(0.072, 0.09, 0.072, M.navy, -9.0, 0.82, -5.2);
-b(0.025, 0.025, 0.08, M.navy, -8.97, 0.875, -5.2); // mug handle (approximate)
-// Dundie award
-b(0.055, 0.22, 0.055, M.gold, -9.5, 0.88, -5.0);
-b(0.09, 0.04, 0.09, M.gold, -9.5, 0.79, -5.0);
-b(0.04, 0.06, 0.04, M.gold, -9.5, 1.0, -5.0);
-// Name plate
-b(0.3, 0.028, 0.065, M.gold, -9.5, 0.79, -5.28);
-// Papers/docs on desk
-b(0.26, 0.006, 0.32, M.paper, -10.1, 0.79, -5.7);
-b(0.24, 0.006, 0.30, M.paper, -10.1, 0.798, -5.65);
-
-office_chair(-9.5, -6.6, 0, 0x1c1c1c);
-office_chair(-10.7, -4.2, 0.5);
-office_chair(-8.5, -4.2, -0.5);
-
-// Bookcase in Michael's office
-function bookcase(x, z, ry=0) {
-  const g = new THREE.Group();
-  b(0, 0, 0, M.wood, 0, 0, 0); // placeholder — build inline
-  const frame = new THREE.Mesh(bGeo(1.3, 2.1, 0.32), M.wood);
-  frame.position.y = 1.05;
-  const colorsB = [0xcc2222,0x2255cc,0x228833,0xcc8822,0x882288,0x226688,0xcc4422];
-  const shelves = new THREE.Group();
-  for (let si = 0; si < 4; si++) {
-    const sh = new THREE.Mesh(bGeo(1.22, 0.04, 0.3), new THREE.MeshStandardMaterial({color:0x7a5428}));
-    sh.position.set(0, 0.25 + si*0.46, 0); shelves.add(sh);
-    let bx = -0.52;
-    for (let bi = 0; bi < 7; bi++) {
-      const bw = 0.06 + Math.random()*0.05;
-      const bh = 0.22 + Math.random()*0.12;
-      const book = new THREE.Mesh(bGeo(bw, bh, 0.26), new THREE.MeshStandardMaterial({color:colorsB[(si*7+bi)%colorsB.length],roughness:0.85}));
-      book.position.set(bx+bw/2, 0.27+si*0.46+bh/2, 0); shelves.add(book);
-      bx += bw + 0.008;
+// Bookcases Michael's office
+(function(){
+  function bookcase(x,z,ry){
+    const g=new THREE.Group();
+    const fr=new THREE.Mesh(bGeo(1.3,2.1,0.32),M.wood); fr.position.y=1.05; g.add(fr);
+    const cols=[0xcc2222,0x2255cc,0x228833,0xcc8822,0x882288,0x226688,0xcc4422];
+    for(let si=0;si<4;si++){
+      const sh=new THREE.Mesh(bGeo(1.22,0.04,0.3),new THREE.MeshStandardMaterial({color:0x7a5428}));
+      sh.position.set(0,0.25+si*0.46,0); g.add(sh);
+      let bx=-0.52;
+      for(let bi=0;bi<7;bi++){
+        const bw=0.06+Math.random()*0.05, bh=0.22+Math.random()*0.12;
+        const bk=new THREE.Mesh(bGeo(bw,bh,0.26),new THREE.MeshStandardMaterial({color:cols[(si*7+bi)%cols.length],roughness:0.85}));
+        bk.position.set(bx+bw/2,0.27+si*0.46+bh/2,0); g.add(bk); bx+=bw+0.008;
+      }
     }
+    g.position.set(x,0,z); g.rotation.y=ry;
+    g.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}}); scene.add(g);
   }
-  const grp = new THREE.Group();
-  grp.add(frame, shelves);
-  grp.position.set(x, 0, z);
-  grp.rotation.y = ry;
-  grp.traverse(c => { if(c.isMesh){ c.castShadow=true; c.receiveShadow=true; } });
-  scene.add(grp);
-}
-bookcase(-11.55, -6.5, Math.PI/2);
-bookcase(-11.55, -4.0, Math.PI/2);
+  bookcase(-11.55,-6.5,Math.PI/2);
+  bookcase(-11.55,-4.0,Math.PI/2);
+})();
+b(0.05,0.19,0.05,M.gold,-11.2,1.55,-6.5);
 
-// Extra Dundie on bookcase shelf
-b(0.05, 0.19, 0.05, M.gold, -11.2, 1.55, -6.5);
+// Conference room
+b(4.4,0.05,1.8,M.deskDark,-9.5,0.77,0);
+b(4.3,0.74,1.7,new THREE.MeshStandardMaterial({color:0x4a2810,roughness:0.65}),-9.5,0.375,0);
+[[-11.4,0,Math.PI/2],[-10.4,1.1,Math.PI],[-9.5,1.1,Math.PI],[-8.6,1.1,Math.PI],
+ [-7.8,0,-Math.PI/2],[-10.4,-1.1,0],[-9.5,-1.1,0],[-8.6,-1.1,0]]
+  .forEach(([x,cz,ry])=>chair(x,cz,ry));
+b(2.6,0.02,1.65,M.whiteboard,-9.5,2.15,-7.95,Math.PI/2,0,0);
+b(2.65,0.055,0.055,M.black,-9.5,2.97,-7.95);
+b(0.32,0.14,0.42,M.black,-9.5,3.0,-1.0);
+cyl(0.025,0.025,0.14,8,M.metal,-9.5,CH-0.04,-1.0);
+b(0.02,1.3,2.2,M.whiteboard,-7.04,1.85,0);
+b(0.02,0.04,2.2,M.metal,-7.04,1.18,0);
 
-// ─── CONFERENCE ROOM ─────────────────────────────────────────────────────────
-// Big conference table
-b(4.4, 0.05, 1.8, M.deskDark, -9.5, 0.77, 0);
-b(4.3, 0.74, 1.7, new THREE.MeshStandardMaterial({color:0x4a2810,roughness:0.65}), -9.5, 0.375, 0);
-
-// Conference chairs
-[
-  [-11.4,  0,    Math.PI/2],
-  [-10.4,  1.1,  Math.PI],
-  [-9.5,   1.1,  Math.PI],
-  [-8.6,   1.1,  Math.PI],
-  [-7.8,   0,   -Math.PI/2],
-  [-10.4, -1.1,  0],
-  [-9.5,  -1.1,  0],
-  [-8.6,  -1.1,  0],
-].forEach(([x, cz, ry]) => office_chair(x, cz, ry));
-
-// Projector screen on north wall
-b(2.6, 0.02, 1.65, M.whiteboard, -9.5, 2.15, -7.95, Math.PI/2, 0, 0);
-b(2.65, 0.055, 0.055, M.black, -9.5, 2.97, -7.95);
-// Screen pull handle
-b(0.04, 0.04, 0.04, M.metal, -9.5, 1.32, -7.95);
-
-// Projector
-b(0.32, 0.14, 0.42, M.black, -9.5, 3.0, -1.0);
-cyl(0.025, 0.025, 0.14, 8, M.metal, -9.5, CH-0.04, -1.0); // mount rod
-// Projector lens
-cyl(0.04, 0.05, 0.12, 16, M.metal, -9.5, 3.0, -1.2, Math.PI/2, 0, 0);
-
-// Whiteboard east wall of conference room
-b(0.02, 1.3, 2.2, M.whiteboard, -7.04, 1.85, 0);
-// Marker tray
-b(0.02, 0.04, 2.2, M.metal, -7.04, 1.18, 0);
-// Marker
-b(0.02, 0.016, 0.14, new THREE.MeshStandardMaterial({color:0x2244aa}), -7.04, 1.22, -0.5);
-b(0.02, 0.016, 0.14, new THREE.MeshStandardMaterial({color:0xcc2222}), -7.04, 1.22, 0.5);
-
-// ─── BREAK ROOM ──────────────────────────────────────────────────────────────
-// Counter
-b(4.5, 0.9, 0.65, new THREE.MeshStandardMaterial({color:0xd0ccc0,roughness:0.6}), -9.75, 0.45, 7.95);
-b(4.6, 0.05, 0.7, new THREE.MeshStandardMaterial({color:0xc0bbb2,roughness:0.5}), -9.75, 0.92, 7.95);
-
-// Refrigerator
-b(0.76, 1.85, 0.72, new THREE.MeshStandardMaterial({color:0xe0e0da,roughness:0.35,metalness:0.25}), -11.25, 0.925, 5.2);
-b(0.04, 0.44, 0.04, M.metal, -10.88, 1.1, 5.2); // handle
-// Fridge magnets
-const magColors = [0xcc2244,0x2244cc,0x22cc44,0xffcc00];
-magColors.forEach((c,i) => b(0.04,0.04,0.005,new THREE.MeshStandardMaterial({color:c}), -10.87, 1.3+i*0.12, 5.0+i*0.06));
-
-// Microwave
-b(0.48, 0.32, 0.38, M.black, -11.1, 1.08, 7.85);
-b(0.32, 0.24, 0.015, new THREE.MeshStandardMaterial({color:0x222222,transparent:true,opacity:0.7}), -11.1, 1.08, 7.67);
-
-// Coffee maker
-b(0.22, 0.38, 0.26, M.black, -9.0, 1.11, 7.82);
-b(0.14, 0.08, 0.14, new THREE.MeshStandardMaterial({color:0x443322}), -9.0, 0.96, 7.82); // pot
-
-// Toaster
-b(0.28, 0.2, 0.2, new THREE.MeshStandardMaterial({color:0xd0d0cc,metalness:0.4,roughness:0.4}), -9.6, 1.02, 7.82);
-
-// Round break room table
-cyl(0.72, 0.72, 0.05, 32, M.deskDark, -9.0, 0.77, 5.5);
-cyl(0.04, 0.04, 0.75, 8, M.metal, -9.0, 0.375, 5.5);
-cyl(0.38, 0.38, 0.025, 32, M.metal, -9.0, 0.025, 5.5);
-
-// Break room chairs
-[0, Math.PI*0.5, Math.PI, -Math.PI*0.5].forEach(a => {
-  const r = 1.05;
-  office_chair(-9.0 + Math.sin(a)*r, 5.5 + Math.cos(a)*r, a + Math.PI);
+// Break room
+b(4.5,0.9,0.65,new THREE.MeshStandardMaterial({color:0xd0ccc0,roughness:0.6}),-9.75,0.45,7.95);
+b(4.6,0.05,0.7,new THREE.MeshStandardMaterial({color:0xc0bbb2,roughness:0.5}),-9.75,0.92,7.95);
+b(0.76,1.85,0.72,new THREE.MeshStandardMaterial({color:0xe0e0da,roughness:0.35,metalness:0.25}),-11.25,0.925,5.2);
+b(0.04,0.44,0.04,M.metal,-10.88,1.1,5.2);
+b(0.48,0.32,0.38,M.black,-11.1,1.08,7.85);
+b(0.22,0.38,0.26,M.black,-9.0,1.11,7.82);
+b(0.28,0.2,0.2,new THREE.MeshStandardMaterial({color:0xd0d0cc,metalness:0.4,roughness:0.4}),-9.6,1.02,7.82);
+cyl(0.72,0.72,0.05,32,M.deskDark,-9.0,0.77,5.5);
+cyl(0.04,0.04,0.75,8,M.metal,-9.0,0.375,5.5);
+[0,Math.PI*0.5,Math.PI,-Math.PI*0.5].forEach(a=>{
+  const r=1.05; chair(-9.0+Math.sin(a)*r,5.5+Math.cos(a)*r,a+Math.PI);
 });
-
-// Vending machine
-b(0.88, 1.9, 0.52, new THREE.MeshStandardMaterial({color:0x1a3a6a,roughness:0.4}), -11.55, 0.95, 7.0);
-b(0.62, 1.08, 0.04, new THREE.MeshStandardMaterial({color:0x6699bb,transparent:true,opacity:0.55}), -11.55, 1.14, 6.75);
-for (let r=0; r<4; r++) for (let c=0; c<3; c++) {
-  const sc = [0xffaa00,0xcc3333,0x3355cc,0x33aa44,0xff6600,0xaa2288][r*3+c];
-  b(0.14,0.1,0.015,new THREE.MeshStandardMaterial({color:sc}), -11.55-0.2+c*0.2, 0.75+r*0.22, 6.76);
+b(0.88,1.9,0.52,new THREE.MeshStandardMaterial({color:0x1a3a6a,roughness:0.4}),-11.55,0.95,7.0);
+b(0.62,1.08,0.04,new THREE.MeshStandardMaterial({color:0x6699bb,transparent:true,opacity:0.55}),-11.55,1.14,6.75);
+for(let r=0;r<4;r++) for(let c=0;c<3;c++){
+  const sc=[0xffaa00,0xcc3333,0x3355cc,0x33aa44,0xff6600,0xaa2288][r*3+c]||0xffffff;
+  b(0.14,0.1,0.015,new THREE.MeshStandardMaterial({color:sc}),-11.55-0.2+c*0.2,0.75+r*0.22,6.76);
 }
+b(1.6,0.03,1.1,new THREE.MeshStandardMaterial({color:0xaa8855,roughness:0.95}),-11.94,2.0,5.5,0,0,Math.PI/2);
+b(0.32,0.005,0.22,M.paper,-11.92,2.15,5.3);
+b(0.28,0.005,0.18,M.paper,-11.92,1.75,5.65);
 
-// Bulletin board
-b(1.6, 0.03, 1.1, new THREE.MeshStandardMaterial({color:0xaa8855,roughness:0.95}), -11.94, 2.0, 5.5, 0, 0, Math.PI/2);
-b(0.32, 0.005, 0.22, M.paper, -11.92, 2.15, 5.3);
-b(0.28, 0.005, 0.18, M.paper, -11.92, 1.75, 5.65);
-b(0.25, 0.005, 0.20, new THREE.MeshStandardMaterial({color:0xffeecc}), -11.92, 2.0, 5.72);
+// Annex
+desk(9.0,4.8,0); mon(9.0,0.78,4.6); chair(9.0,5.6,Math.PI);
+b(0.28,0.18,0.24,M.red,9.5,0.84,4.7);
+desk(9.0,7.0,0); mon(9.0,0.78,6.8); chair(9.0,7.8,Math.PI);
+b(0.22,0.012,0.28,new THREE.MeshStandardMaterial({color:0xff69b4}),8.7,0.79,7.15);
+b(0.08,0.12,0.08,new THREE.MeshStandardMaterial({color:0xff88cc}),9.4,0.8,7.05);
 
-// ─── ANNEX ───────────────────────────────────────────────────────────────────
-// Toby's desk
-work_desk(9.0, 4.8, 0);
-desk_monitor(9.0, 0.78, 4.6);
-office_chair(9.0, 5.6, Math.PI);
-b(0.2, 0.04, 0.14, M.plastic, 9.6, 0.8, 4.9);
-// HR complaint forms (red folders)
-b(0.28, 0.18, 0.24, M.red, 9.5, 0.84, 4.7);
-b(0.04, 0.22, 0.06, M.gold, 9.2, 0.82, 4.65); // Toby's sad little trophy
+// Clock
+cyl(0.28,0.28,0.04,32,new THREE.MeshStandardMaterial({color:0xffffff,roughness:0.5}),0.0,2.55,-7.93);
+cyl(0.26,0.26,0.022,32,new THREE.MeshStandardMaterial({color:0xf4f4f0}),0.0,2.565,-7.93);
+b(0.018,0.19,0.018,M.black,0.0,2.565,-7.91,0,0,-0.42);
+b(0.014,0.14,0.014,M.black,0.0,2.565,-7.91,0,0,1.1);
 
-// Kelly's desk
-work_desk(9.0, 7.0, 0);
-desk_monitor(9.0, 0.78, 6.8);
-office_chair(9.0, 7.8, Math.PI);
-// Kelly's fashion stuff
-b(0.22, 0.012, 0.28, new THREE.MeshStandardMaterial({color:0xff69b4}), 8.7, 0.79, 7.15);
-b(0.20, 0.012, 0.24, new THREE.MeshStandardMaterial({color:0xff1493}), 8.5, 0.80, 7.0);
-b(0.08, 0.12, 0.08, new THREE.MeshStandardMaterial({color:0xff88cc}), 9.4, 0.8, 7.05); // pink mug
-
-// ─── MISC OFFICE DETAILS ─────────────────────────────────────────────────────
-// Clock on north wall
-cyl(0.28, 0.28, 0.04, 32, new THREE.MeshStandardMaterial({color:0xffffff,roughness:0.5}), 0.0, 2.55, -7.93);
-cyl(0.26, 0.26, 0.022, 32, new THREE.MeshStandardMaterial({color:0xf4f4f0}), 0.0, 2.565, -7.93);
-b(0.018, 0.19, 0.018, M.black, 0.0, 2.565, -7.91, 0, 0, -0.42); // hour hand
-b(0.014, 0.14, 0.014, M.black, 0.0, 2.565, -7.91, 0, 0, 1.1);   // minute hand
-
-// Motivational posters
-function poster(x, y, z, axis, w=0.65, h=0.85, color=0x336688) {
-  const mat = new THREE.MeshStandardMaterial({color, roughness:0.75});
-  const frameMat = new THREE.MeshStandardMaterial({color:0xffffff,roughness:0.5});
-  if (axis==='z') {
-    b(w+0.04, h+0.04, 0.01, frameMat, x, y, z);
-    b(w, h, 0.012, mat, x, y, z+0.002);
-  } else {
-    b(0.01, h+0.04, w+0.04, frameMat, x, y, z);
-    b(0.012, h, w, mat, x+0.002, y, z);
-  }
+// Posters
+function poster(x,y,z,ax,w=0.65,h=0.85,col=0x336688){
+  const mat=new THREE.MeshStandardMaterial({color:col,roughness:0.75});
+  const fr=new THREE.MeshStandardMaterial({color:0xffffff,roughness:0.5});
+  if(ax==='x'){b(0.01,h+0.04,w+0.04,fr,x,y,z);b(0.012,h,w,mat,x+0.002,y,z);}
+  else{b(w+0.04,h+0.04,0.01,fr,x,y,z);b(w,h,0.012,mat,x,y,z+0.002);}
 }
-poster(-11.92, 1.75, 0.0, 'x', 0.7, 0.9, 0x3a5a78);
-poster(-11.92, 1.75, -4.0, 'x', 0.7, 0.9, 0x885533);
-poster(11.92, 1.75, -4.0, 'x', 0.7, 0.9, 0x336644);
-poster(11.92, 1.75, -1.0, 'x', 0.7, 0.9, 0x663322);
-poster(11.92, 1.75,  2.0, 'x', 0.7, 0.9, 0x5a3366);
+poster(-11.92,1.75,0,'x',0.7,0.9,0x3a5a78);
+poster(-11.92,1.75,-4,'x',0.7,0.9,0x885533);
+poster(11.92,1.75,-4,'x',0.7,0.9,0x336644);
+poster(11.92,1.75,-1,'x',0.7,0.9,0x663322);
+poster(11.92,1.75,2,'x',0.7,0.9,0x5a3366);
 
 // Plants
-function plant(x, z, h=1.15) {
-  cyl(0.16, 0.12, 0.28, 16, new THREE.MeshStandardMaterial({color:0x8b4513}), x, 0.14, z);
-  cyl(0.14, 0.14, 0.02, 16, new THREE.MeshStandardMaterial({color:0x3a1e08}), x, 0.27, z);
-  sph(0.24, 8, new THREE.MeshStandardMaterial({color:0x228822,roughness:0.9}), x, h*0.72, z);
-  if (h > 1.0) sph(0.18, 7, new THREE.MeshStandardMaterial({color:0x2a9a2a,roughness:0.9}), x+0.18, h*0.6, z+0.1);
+function plant(x,z,h=1.15){
+  cyl(0.16,0.12,0.28,16,new THREE.MeshStandardMaterial({color:0x8b4513}),x,0.14,z);
+  sph(0.24,8,new THREE.MeshStandardMaterial({color:0x228822,roughness:0.9}),x,h*0.72,z);
 }
-plant(-3.5, -7.6, 1.4);
-plant(11.5, -7.6, 1.4);
-plant(-3.5, 7.8, 1.5);
-plant(5.5, 7.8, 1.2);
-plant(-11.5, -7.6, 1.8);
-plant(11.5, 7.8, 1.2);
+plant(-3.5,-7.6,1.4); plant(11.5,-7.6,1.4); plant(-3.5,7.8,1.5);
+plant(5.5,7.8,1.2); plant(-11.5,-7.6,1.8);
 
-// Trash cans
-function trashCan(x, z) {
-  cyl(0.14, 0.11, 0.35, 12, new THREE.MeshStandardMaterial({color:0x555555,roughness:0.7}), x, 0.175, z);
-}
-trashCan(-1.8, -3.5);
-trashCan(1.0, -3.5);
-trashCan(-9.5, -3.6);
-trashCan(-9.5, 1.8);
-trashCan(-9.8, 7.8);
+// Paper box stacks
+[[-5.8,-7.4],[-5.3,-7.4],[9.8,-7.4]].forEach(([x,z])=>{
+  [0.14,0.42,0.7].forEach(y=>b(0.38,0.28,0.48,new THREE.MeshStandardMaterial({color:0xddddc8,roughness:0.85}),x,y,z));
+});
 
-// Extra stacks of paper boxes
-function paperBox(x, z) {
-  b(0.38, 0.28, 0.48, new THREE.MeshStandardMaterial({color:0xddddcc,roughness:0.85}), x, 0.14, z);
-  b(0.38, 0.28, 0.48, new THREE.MeshStandardMaterial({color:0xd8d8c5,roughness:0.85}), x, 0.42, z);
-  b(0.38, 0.28, 0.48, new THREE.MeshStandardMaterial({color:0xe0e0d0,roughness:0.85}), x, 0.7, z);
-}
-paperBox(-5.8, -7.4);
-paperBox(-5.3, -7.4);
-paperBox(9.8, -7.4);
-
-// Supply shelf near printer
-b(1.3, 0.04, 0.35, M.woodLight, 9.0, 1.2, -4.5);
-b(1.3, 0.04, 0.35, M.woodLight, 9.0, 1.6, -4.5);
-b(0.04, 1.65, 0.35, M.woodLight, 8.35, 0.835, -4.5);
-b(0.04, 1.65, 0.35, M.woodLight, 9.65, 0.835, -4.5);
-// Supplies on shelf
-b(0.12, 0.12, 0.1, new THREE.MeshStandardMaterial({color:0x2255aa}), 8.8, 1.28, -4.45);
-b(0.08, 0.18, 0.08, new THREE.MeshStandardMaterial({color:0xcc4422}), 9.1, 1.3, -4.45);
-
-// Whiteboard near Pam's desk (showing messages)
-b(0.02, 1.1, 1.8, M.whiteboard, -3.95, 1.8, 5.5);
-b(0.02, 0.04, 1.8, M.metal, -3.95, 1.22, 5.5);
-
-// Thermometer sign near Michael's office
-b(0.36, 0.55, 0.02, new THREE.MeshStandardMaterial({color:0xffffff,roughness:0.5}), -7.03, 1.5, -5.5);
-
-// ─── MOVEMENT & ANIMATION ───────────────────────────────────────────────────
-const keys = {};
-document.addEventListener('keydown', e => { keys[e.code] = true; e.preventDefault(); });
-document.addEventListener('keyup',   e => { keys[e.code] = false; });
-
-const velocity = new THREE.Vector3();
-const clock = new THREE.Clock();
-
-window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
+// Controls
+const keys={};
+document.addEventListener('keydown',e=>{keys[e.code]=true;e.preventDefault();});
+document.addEventListener('keyup',e=>{keys[e.code]=false;});
+const velocity=new THREE.Vector3(), clock=new THREE.Clock();
+window.addEventListener('resize',()=>{
+  camera.aspect=window.innerWidth/window.innerHeight;
   camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(window.innerWidth,window.innerHeight);
 });
 
 // Minimap
-const miniCanvas = document.getElementById('minimap');
-const mCtx = miniCanvas.getContext('2d');
-miniCanvas.width = 160;
-miniCanvas.height = 110;
-
-function drawMinimap() {
-  mCtx.fillStyle = 'rgba(20,18,14,0.85)';
-  mCtx.fillRect(0, 0, 160, 110);
-  // rooms
-  const scale = 5.5;
-  const ox = 80, oz = 55;
-  function wx(x) { return ox + x * scale; }
-  function wz(z) { return oz + z * scale; }
-  // Floor outline
-  mCtx.strokeStyle = '#888'; mCtx.lineWidth = 1;
-  mCtx.strokeRect(wx(-12), wz(-8), 24*scale, 17*scale);
-  // Michael office
-  mCtx.strokeStyle = '#4af'; mCtx.lineWidth = 0.5;
-  mCtx.strokeRect(wx(-12), wz(-8), 5*scale, 5*scale);
-  // Conf room
-  mCtx.strokeRect(wx(-12), wz(-3), 5*scale, 7*scale);
-  // Break
-  mCtx.strokeStyle = '#8f8'; mCtx.lineWidth = 0.5;
-  mCtx.strokeRect(wx(-12), wz(4), 5*scale, 4.5*scale);
-  // Annex
-  mCtx.strokeRect(wx(7), wz(4), 5*scale, 4.5*scale);
-  // Player dot
-  const px = camera.position.x, pz = camera.position.z;
-  mCtx.fillStyle = '#ff4'; mCtx.beginPath();
-  mCtx.arc(wx(px), wz(pz), 2.5, 0, Math.PI*2); mCtx.fill();
-  // Direction indicator
-  const dir = new THREE.Vector3();
-  camera.getWorldDirection(dir);
-  mCtx.strokeStyle = '#ff4'; mCtx.lineWidth = 1;
-  mCtx.beginPath();
-  mCtx.moveTo(wx(px), wz(pz));
-  mCtx.lineTo(wx(px + dir.x*2.5), wz(pz + dir.z*2.5));
-  mCtx.stroke();
-  // Label
-  mCtx.fillStyle = 'rgba(255,255,200,0.6)'; mCtx.font = '7px Arial';
-  mCtx.fillText('M', wx(-10.5), wz(-5.5));
-  mCtx.fillText('Conf', wx(-11.5), wz(0.2));
-  mCtx.fillText('Break', wx(-11.8), wz(5.2));
-  mCtx.fillText('Annex', wx(7.2), wz(5.2));
-  mCtx.fillText('Reception', wx(-1), wz(6.5));
+const mc=document.getElementById('minimap'), mx=mc.getContext('2d');
+mc.width=160; mc.height=110;
+function drawMap(){
+  mx.fillStyle='rgba(20,18,14,0.88)'; mx.fillRect(0,0,160,110);
+  const sc=5.5,ox=80,oz=55;
+  const wx=x=>ox+x*sc, wz=z=>oz+z*sc;
+  mx.strokeStyle='#888'; mx.lineWidth=1;
+  mx.strokeRect(wx(-12),wz(-8),24*sc,17*sc);
+  mx.strokeStyle='#4af'; mx.lineWidth=0.6;
+  mx.strokeRect(wx(-12),wz(-8),5*sc,5*sc);
+  mx.strokeRect(wx(-12),wz(-3),5*sc,7*sc);
+  mx.strokeStyle='#8f8'; mx.lineWidth=0.6;
+  mx.strokeRect(wx(-12),wz(4),5*sc,4.5*sc);
+  mx.strokeRect(wx(7),wz(4),5*sc,4.5*sc);
+  const px=camera.position.x,pz=camera.position.z;
+  mx.fillStyle='#ff4'; mx.beginPath(); mx.arc(wx(px),wz(pz),2.5,0,Math.PI*2); mx.fill();
+  const dir=new THREE.Vector3(); camera.getWorldDirection(dir);
+  mx.strokeStyle='#ff4'; mx.lineWidth=1;
+  mx.beginPath(); mx.moveTo(wx(px),wz(pz)); mx.lineTo(wx(px+dir.x*2.5),wz(pz+dir.z*2.5)); mx.stroke();
+  mx.fillStyle='rgba(255,255,200,0.6)'; mx.font='7px Arial';
+  mx.fillText('M',wx(-10.5),wz(-5.5));
+  mx.fillText('Conf',wx(-11.5),wz(0.2));
+  mx.fillText('Break',wx(-11.8),wz(5.2));
+  mx.fillText('Annex',wx(7.2),wz(5.2));
+  mx.fillText('Recep.',wx(-1),wz(6.8));
 }
 
-function animate() {
+function animate(){
   requestAnimationFrame(animate);
-  const delta = Math.min(clock.getDelta(), 0.05);
-  const speed = (keys['ShiftLeft'] || keys['ShiftRight']) ? 7.5 : 3.5;
-  const damping = 12;
-
-  velocity.x -= velocity.x * damping * delta;
-  velocity.z -= velocity.z * damping * delta;
-
-  if (controls.isLocked) {
-    const fwd  = (keys['KeyW'] || keys['ArrowUp'])    ? 1 : 0;
-    const bwd  = (keys['KeyS'] || keys['ArrowDown'])  ? 1 : 0;
-    const left = (keys['KeyA'] || keys['ArrowLeft'])  ? 1 : 0;
-    const rgt  = (keys['KeyD'] || keys['ArrowRight']) ? 1 : 0;
-    velocity.z -= (fwd - bwd) * speed * delta * 14;
-    velocity.x -= (left - rgt) * speed * delta * 14;
-    controls.moveForward(-velocity.z * delta);
-    controls.moveRight(-velocity.x * delta);
-    // Clamp to office bounds
-    const pos = controls.getObject().position;
-    pos.x = Math.max(-11.5, Math.min(11.5, pos.x));
-    pos.z = Math.max(-7.7, Math.min(8.2, pos.z));
-    pos.y = EYE;
+  const delta=Math.min(clock.getDelta(),0.05);
+  const speed=(keys['ShiftLeft']||keys['ShiftRight'])?7.5:3.5;
+  velocity.x-=velocity.x*12*delta;
+  velocity.z-=velocity.z*12*delta;
+  if(controls.isLocked){
+    const fwd=(keys['KeyW']||keys['ArrowUp'])?1:0;
+    const bwd=(keys['KeyS']||keys['ArrowDown'])?1:0;
+    const lft=(keys['KeyA']||keys['ArrowLeft'])?1:0;
+    const rgt=(keys['KeyD']||keys['ArrowRight'])?1:0;
+    velocity.z-=(fwd-bwd)*speed*delta*14;
+    velocity.x-=(lft-rgt)*speed*delta*14;
+    controls.moveForward(-velocity.z*delta);
+    controls.moveRight(-velocity.x*delta);
+    const pos=controls.getObject().position;
+    pos.x=Math.max(-11.5,Math.min(11.5,pos.x));
+    pos.z=Math.max(-7.7,Math.min(8.2,pos.z));
+    pos.y=EYE;
   }
-  drawMinimap();
-  renderer.render(scene, camera);
+  drawMap();
+  renderer.render(scene,camera);
 }
 animate();
   </script>
